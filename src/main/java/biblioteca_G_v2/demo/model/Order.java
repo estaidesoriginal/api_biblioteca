@@ -10,17 +10,19 @@ public class Order {
     @Id
     private String id;
     
-    // Si tienes autenticación, aquí guardarías el User ID
     private String userId; 
     
     private Double total;
     
     private LocalDateTime createdAt;
 
+    // --- NUEVO CAMPO ---
+    private String status; // 'pendiente', 'pagado', 'cancelado'
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
-    // Getters y Setters...
+    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUserId() { return userId; }
@@ -29,6 +31,8 @@ public class Order {
     public void setTotal(Double total) { this.total = total; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
 }
