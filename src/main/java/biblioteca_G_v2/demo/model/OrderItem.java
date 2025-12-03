@@ -1,6 +1,7 @@
 package biblioteca_G_v2.demo.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore; // <-- 1. IMPORTAR ESTO
 
 @Entity
 @Table(name = "order_items")
@@ -11,7 +12,8 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    @JsonIgnore // <-- 2. AGREGAR ESTA ANOTACIÓN
+    private Order order; // Esto evita que al leer un item, vuelva a leer la orden entera
 
     private String productId;
     private Integer quantity;
