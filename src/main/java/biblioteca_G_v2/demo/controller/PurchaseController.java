@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -20,8 +21,26 @@ public class PurchaseController {
     @Autowired
     private OrderRepository orderRepository;
 
-    // Modificamos para recibir el userId como parámetro en la URL
-    // Ejemplo: POST /compras?userId=uuid-del-usuario
+    // NUEVO: Obtener todas las órdenes (Para el Admin)
+    @GetMapping
+    public List<Order> getAllOrders() {
+        // En una app real, aquí filtrarías para que solo el ADMIN pueda ver esto
+        return orderRepository.findAll();
+    }
+
+    // NUEVO: Actualizar el estado de una orden
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<?> updateStatus(@PathVariable String id, @RequestBody Map<String, String> body) {
+        String newStatus = body.get("status"); // Esperamos JSON { "status": "pagado" }
+        
+        return orderRepository.findById(id).map(order -> {
+            order.setStatus(newStatus);
+            orderRepository.save(order);
+            return ResponseEntity.ok(order);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // Crear orden (Existente)
     @PostMapping
     public ResponseEntity<?> confirmPurchase(
             @RequestBody List<CartItemDTO> items,
@@ -31,19 +50,15 @@ public class PurchaseController {
             return ResponseEntity.badRequest().body("El carrito está vacío");
         }
 
-        // 1. Crear la Orden
         Order order = new Order();
         order.setId(UUID.randomUUID().toString());
         order.setCreatedAt(LocalDateTime.now());
-        
-        // CORRECCIÓN: Usamos el ID real del usuario que viene de la App
-        // Esto evita el error de Foreign Key en la base de datos
         order.setUserId(userId); 
+        order.setStatus("pendiente"); // Por defecto
 
         double total = 0.0;
         List<OrderItem> orderItems = new ArrayList<>();
 
-        // 2. Procesar Items
         for (CartItemDTO itemDto : items) {
             OrderItem item = new OrderItem();
             item.setOrder(order);
@@ -58,10 +73,7 @@ public class PurchaseController {
         order.setTotal(total);
         order.setItems(orderItems);
 
-        // 3. Guardar en Base de Datos
         Order savedOrder = orderRepository.save(order);
-
-        // 4. Devolvemos la orden guardada (con su ID real) para la boleta
         return ResponseEntity.ok(savedOrder);
     }
 }
