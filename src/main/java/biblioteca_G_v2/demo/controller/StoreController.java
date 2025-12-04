@@ -44,4 +44,14 @@ public class StoreController {
             })
             .orElse(ResponseEntity.notFound().build());
     }
+    // Endpoint para borrar productos (FALTABA ESTE)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return ResponseEntity.ok().build(); // Devuelve 200 OK si se borró
+        } else {
+            return ResponseEntity.notFound().build(); // Devuelve 404 si no existía
+        }
+    }
 }
