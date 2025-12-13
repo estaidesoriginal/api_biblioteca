@@ -2,6 +2,7 @@ package biblioteca_G_v2.demo.controller;
 
 import biblioteca_G_v2.demo.dto.AuthDTOs.*;
 import biblioteca_G_v2.demo.model.User;
+import biblioteca_G_v2.demo.model.Roles; // Importamos las constantes
 import biblioteca_G_v2.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,9 @@ public class AuthController {
         newUser.setName(request.name);
         newUser.setEmail(request.email);
         newUser.setPassword(request.password);
-        newUser.setRole("USER");
+        
+        // Por defecto, el registro público crea un USER (Cliente)
+        newUser.setRole(Roles.USER); 
 
         userRepository.save(newUser);
 
