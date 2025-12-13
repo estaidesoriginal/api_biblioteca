@@ -1,7 +1,6 @@
 package biblioteca_G_v2.demo.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "users")
@@ -17,7 +16,8 @@ public class User {
 
     private String password;
 
-    private String role; // "ADMIN" o "USER"
+    // Valores posibles definidos en Roles.java: "USER", "ADMIN", "SELLER", "MANAGER"
+    private String role; 
 
     public User() {}
 
