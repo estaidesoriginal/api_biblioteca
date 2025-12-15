@@ -2,11 +2,12 @@ package biblioteca_G_v2.demo.controller;
 
 import biblioteca_G_v2.demo.dto.AuthDTOs.*;
 import biblioteca_G_v2.demo.model.User;
-import biblioteca_G_v2.demo.model.Roles; // Importamos las constantes
 import biblioteca_G_v2.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Optional;
 
@@ -42,12 +43,35 @@ public class AuthController {
         newUser.setName(request.name);
         newUser.setEmail(request.email);
         newUser.setPassword(request.password);
-        
-        // Por defecto, el registro público crea un USER (Cliente)
-        newUser.setRole(Roles.USER); 
+        newUser.setRole("USER"); 
 
         userRepository.save(newUser);
 
         return ResponseEntity.ok(new AuthResponse(newUser, "dummy-token-new"));
+    }
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/rol")
+    public ResponseEntity<?> updateUserRole(@PathVariable String id, @RequestBody Map<String, String> body) {
+        String newRole = body.get("role"); // Esperamos { "role": "MANAGER" }
+        
+        return userRepository.findById(id).map(user -> {
+            user.setRole(newRole);
+            userRepository.save(user);
+            return ResponseEntity.ok(user);
+        }).orElse(ResponseEntity.notFound().build());
     }
 }
