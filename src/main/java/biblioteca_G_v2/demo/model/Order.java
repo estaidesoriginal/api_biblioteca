@@ -16,13 +16,11 @@ public class Order {
     
     private LocalDateTime createdAt;
 
-    // --- NUEVO CAMPO ---
-    private String status; // 'pendiente', 'pagado', 'cancelado'
+    private String status; 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUserId() { return userId; }
@@ -36,3 +34,4 @@ public class Order {
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
 }
+
