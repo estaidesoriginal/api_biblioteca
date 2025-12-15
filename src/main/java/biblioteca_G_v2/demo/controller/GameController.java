@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-// ¡AQUÍ ESTÁ! Esta línea define que la URL base es "/juegos"
 @RequestMapping("/juegos") 
 @CrossOrigin(origins = "*")
 public class GameController {
@@ -17,15 +16,11 @@ public class GameController {
     @Autowired
     private GameRepository gameRepository;
 
-    // Al usar @GetMapping sin argumentos, hereda la ruta "/juegos"
-    // Resultado: GET http://.../juegos
     @GetMapping
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
 
-    // Al usar @GetMapping("/{id}"), se suma a la ruta base
-    // Resultado: GET http://.../juegos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Game> getGameById(@PathVariable String id) {
         return gameRepository.findById(id)
@@ -33,7 +28,6 @@ public class GameController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Resultado: POST http://.../juegos
     @PostMapping
     public Game createGame(@RequestBody Game game) {
         if (game.getId() == null || game.getId().isEmpty()) {
@@ -42,7 +36,6 @@ public class GameController {
         return gameRepository.save(game);
     }
 
-    // Resultado: PUT http://.../juegos/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable String id, @RequestBody Game gameDetails) {
         return gameRepository.findById(id)
@@ -59,7 +52,6 @@ public class GameController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // Resultado: DELETE http://.../juegos/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGame(@PathVariable String id) {
         return gameRepository.findById(id)
@@ -69,4 +61,5 @@ public class GameController {
             })
             .orElse(ResponseEntity.notFound().build());
     }
+
 }
