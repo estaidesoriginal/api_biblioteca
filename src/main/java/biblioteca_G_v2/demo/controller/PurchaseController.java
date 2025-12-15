@@ -21,17 +21,15 @@ public class PurchaseController {
     @Autowired
     private OrderRepository orderRepository;
 
-    // NUEVO: Obtener todas las órdenes (Para el Admin)
     @GetMapping
     public List<Order> getAllOrders() {
-        // En una app real, aquí filtrarías para que solo el ADMIN pueda ver esto
+
         return orderRepository.findAll();
     }
 
-    // NUEVO: Actualizar el estado de una orden
     @PutMapping("/{id}/estado")
     public ResponseEntity<?> updateStatus(@PathVariable String id, @RequestBody Map<String, String> body) {
-        String newStatus = body.get("status"); // Esperamos JSON { "status": "pagado" }
+        String newStatus = body.get("status");
         
         return orderRepository.findById(id).map(order -> {
             order.setStatus(newStatus);
@@ -40,7 +38,6 @@ public class PurchaseController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // Crear orden (Existente)
     @PostMapping
     public ResponseEntity<?> confirmPurchase(
             @RequestBody List<CartItemDTO> items,
@@ -54,7 +51,7 @@ public class PurchaseController {
         order.setId(UUID.randomUUID().toString());
         order.setCreatedAt(LocalDateTime.now());
         order.setUserId(userId); 
-        order.setStatus("pendiente"); // Por defecto
+        order.setStatus("pendiente");
 
         double total = 0.0;
         List<OrderItem> orderItems = new ArrayList<>();
@@ -77,4 +74,5 @@ public class PurchaseController {
         return ResponseEntity.ok(savedOrder);
     }
 }
+
 
