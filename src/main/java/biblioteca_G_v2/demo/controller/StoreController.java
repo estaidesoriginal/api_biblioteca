@@ -36,8 +36,7 @@ public class StoreController {
                 product.setName(productDetails.getName());
                 product.setDescription(productDetails.getDescription());
                 product.setPrice(productDetails.getPrice());
-                
-                // ACTUALIZADO: Seteamos la lista de categorías
+
                 product.setCategories(productDetails.getCategories());
                 
                 product.setStock(productDetails.getStock());
@@ -58,3 +57,4 @@ public class StoreController {
             .orElse(ResponseEntity.notFound().build());
     }
 }
+
