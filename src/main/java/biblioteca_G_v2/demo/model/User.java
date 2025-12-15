@@ -16,7 +16,6 @@ public class User {
 
     private String password;
 
-    // Valores posibles definidos en Roles.java: "USER", "ADMIN", "SELLER", "MANAGER"
     private String role; 
 
     public User() {}
@@ -40,3 +39,4 @@ public class User {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 }
+
