@@ -23,7 +23,7 @@ public class StoreController {
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
-        if (product.getId() == null) {
+        if (product.getId() == null || product.getId().isEmpty()) {
             product.setId(UUID.randomUUID().toString());
         }
         return productRepository.save(product);
@@ -36,7 +36,10 @@ public class StoreController {
                 product.setName(productDetails.getName());
                 product.setDescription(productDetails.getDescription());
                 product.setPrice(productDetails.getPrice());
-                product.setCategory(productDetails.getCategory());
+                
+                // ACTUALIZADO: Seteamos la lista de categorías
+                product.setCategories(productDetails.getCategories());
+                
                 product.setStock(productDetails.getStock());
                 product.setImageUrl(productDetails.getImageUrl());
                 Product updatedProduct = productRepository.save(product);
@@ -44,14 +47,14 @@ public class StoreController {
             })
             .orElse(ResponseEntity.notFound().build());
     }
-    // Endpoint para borrar productos (FALTABA ESTE)
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return ResponseEntity.ok().build(); // Devuelve 200 OK si se borró
-        } else {
-            return ResponseEntity.notFound().build(); // Devuelve 404 si no existía
-        }
+        return productRepository.findById(id)
+            .map(product -> {
+                productRepository.delete(product);
+                return ResponseEntity.ok().build();
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 }
