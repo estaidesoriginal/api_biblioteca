@@ -17,8 +17,6 @@ public class Product {
     private Double price;
     private Integer stock;
 
-    // --- CAMBIO PRINCIPAL ---
-    // Reemplazamos 'String category' por una Lista
     @ElementCollection
     @CollectionTable(name = "product_categories", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "categories")
@@ -30,7 +28,6 @@ public class Product {
 
     public Product() {}
     
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -49,7 +46,7 @@ public class Product {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    // Getter y Setter para la lista de categorías
     public List<String> getCategories() { return categories; }
     public void setCategories(List<String> categories) { this.categories = categories; }
 }
+
