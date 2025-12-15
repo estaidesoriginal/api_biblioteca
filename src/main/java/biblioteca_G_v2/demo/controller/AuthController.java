@@ -66,7 +66,7 @@ public class AuthController {
 
     @PutMapping("/{id}/rol")
     public ResponseEntity<?> updateUserRole(@PathVariable String id, @RequestBody Map<String, String> body) {
-        String newRole = body.get("role"); // Esperamos { "role": "MANAGER" }
+        String newRole = body.get("role");
         
         return userRepository.findById(id).map(user -> {
             user.setRole(newRole);
@@ -75,3 +75,4 @@ public class AuthController {
         }).orElse(ResponseEntity.notFound().build());
     }
 }
+
