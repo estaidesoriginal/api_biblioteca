@@ -1,4 +1,4 @@
-* Nombre:Api Biblioteca
+* Nombre: Api Biblioteca
 * Integrantes: Ariel Ben Lulu - Marcelo Novoa
 * Funcionalidades: API usada en la app "Biblioteca_G", alojada en render Con Supabase (PostgreSQL)
   provee la logica de negocio usada en esta app
